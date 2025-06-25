@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cables;
+use App\Models\Cable;
 use Illuminate\Http\Request;
+use League\Csv\Reader;
+use Illuminate\Support\Facades\Storage;
 
 class CableController extends Controller
 {
@@ -12,7 +14,7 @@ class CableController extends Controller
      */
     public function index()
     {
-        //
+        return view('cable.index');
     }
 
     /**
@@ -34,15 +36,15 @@ class CableController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Cables $cables)
+    public function show(Cable $cable)
     {
-        //
+        return view('cable.show', compact('cable'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cables $cables)
+    public function edit(Cable $cables)
     {
         //
     }
@@ -50,7 +52,7 @@ class CableController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cables $cables)
+    public function update(Request $request, Cable $cables)
     {
         //
     }
@@ -58,7 +60,7 @@ class CableController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cables $cables)
+    public function destroy(Cable $cables)
     {
         //
     }

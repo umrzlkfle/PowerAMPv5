@@ -1,5 +1,5 @@
-import PerfectScrollbar from 'perfect-scrollbar';
-window.PerfectScrollbar = PerfectScrollbar;
+import './bootstrap'; // Or your existing imports
+
 
 require('./bootstrap');
 require('./custom');

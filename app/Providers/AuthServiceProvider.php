@@ -8,23 +8,29 @@ use Illuminate\Support\Facades\Gate;
 class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * The policy mappings for the application.
+     * The model to policy mappings for the application.
      *
-     * @var array
+     * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        //
     ];
 
     /**
      * Register any authentication / authorization services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
 
-        //
+        // Define a gate for admin access
+        Gate::define('admin-only', function ($user) {
+            return $user->isAdmin();
+        });
+
+        // Define a gate for edit/delete permissions
+        Gate::define('edit-delete-access', function ($user) {
+            return $user->isAdmin(); // Only admin can edit/delete
+        });
     }
 }

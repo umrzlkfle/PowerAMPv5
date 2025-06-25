@@ -14,8 +14,18 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            scale: {
+                '101': '1.01',
+                '102': '1.02',
+            },
+            transitionProperty: {
+                'height': 'height',
+            }
         },
     },
 
-    plugins: [forms],
+    plugins: [
+        forms,
+        require('@tailwindcss/typography'),
+    ],
 };

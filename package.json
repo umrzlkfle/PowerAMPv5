@@ -20,7 +20,9 @@
         "sass-loader": "^12.4.0"
     },
     "dependencies": {
-        "perfect-scrollbar": "^1.5.5",
-        "async": ">=2.6.4"
+        "async": ">=2.6.4",
+        "chart.js": "^4.5.0",
+        "chartjs-adapter-date-fns": "^3.0.0",
+        "date-fns": "^4.1.0"
     }
 }

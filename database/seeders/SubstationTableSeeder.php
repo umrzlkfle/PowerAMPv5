@@ -3,75 +3,60 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\substation;
+use Illuminate\Support\Facades\DB;
+use League\Csv\Reader; // You might need to install 'league/csv' if not already present
 
 class SubstationTableSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run()
     {
-        $csvData = [
-            [
-                42403472, '2ATE_5S5', '', '', 'Existing', 'RYB', '33.000 kV', 'Class C', 'TNB', 'DISTRIBUTION',
-                '2ATE: 5S5', 'PSPK: 6P5', '630_1C_AL_XLPE', 'NIBONG TEBAL', 1558.640681, 'Insert', '2ATE'
-            ],
-            [
-                40125882, 'AGLN_2L5', '', 'AGLN_2L5', 'Existing', 'RYB', '33.000 kV', 'Class D', 'TNB', 'DISTRIBUTION',
-                'AGLN: 2L5', 'AVGO: 4L5', '630_1C_AL_XLPE', 'PULAU PINANG', 331.9963954, 'Update', 'AGLN'
-            ],
-            [
-                41242114, 'AJYA_1L5', '', '', 'Existing', 'RYB', '33.000 kV', 'Class C', 'TNB', 'DISTRIBUTION',
-                'AJYA: 1L5', 'SGLL: 2L5 [OFF]', '630_1C_AL_XLPE', 'SUNGAI PETANI', 3004.743039, 'Insert', 'AJYA'
-            ],
-            [
-                42381540, 'AJYA_2L5', '', '', 'Existing', 'RYB', '33.000 kV', 'Class C', 'TNB', 'DISTRIBUTION',
-                'AJYA: 2L5', 'SGLL: 1L5 [OFF]', '630_1C_AL_XLPE', 'SUNGAI PETANI', 3002.408442, 'Insert', 'AJYA'
-            ],
-            [
-                42382331, 'AJYA_3L5', '', '', 'Existing', 'RYB', '33.000 kV', 'Class C', 'TNB', 'DISTRIBUTION',
-                'AJYA: 3L5', 'AMJA: 1L5 [OFF]', '630_1C_AL_XLPE', 'SUNGAI PETANI', 5577.754579, 'Insert', 'AJYA'
-            ],
-            [
-                42382338, 'AJYA_4L5', '', '', 'Existing', 'RYB', '33.000 kV', 'Class C', 'TNB', 'DISTRIBUTION',
-                'AJYA: 4L5', 'AMJA: 2L5', '630_1C_AL_XLPE', 'SUNGAI PETANI', 5573.479585, 'Insert', 'AJYA'
-            ],
-            [
-                41374780, 'AJYA_6L5', '', '', 'Existing', 'RYB', '33.000 kV', 'Class C', 'TNB', 'DISTRIBUTION',
-                'AJYA: 6L5', 'MDC: 4S5', '630_1C_AL_XLPE', 'SUNGAI PETANI', 6275.117195, 'Insert', 'AJYA'
-            ],
-            [
-                42381533, 'AJYA_7L5', 'AJYA_7L5', 'Existing', 'RYB', '33.000 kV', 'Class C', 'TNB', 'DISTRIBUTION',
-                'AJYA: 7L5', 'KLSA: 1L5', '630_1C_AL_XLPE', 'SUNGAI PETANI', 13186.39531, 'Update', 'AJYA'
-            ],
-            [
-                41242121, 'AJYA_8L5', '', '', 'Existing', 'RYB', '33.000 kV', 'Class C', 'TNB', 'DISTRIBUTION',
-                'AJYA: 8L5', 'KLSA: 4L5', '630_1C_AL_XLPE', 'SUNGAI PETANI', 13181.31433, 'Insert', 'AJYA'
-            ],
-            [
-                40223660, 'ALNA_4S5', '', '', 'Existing', 'RYB', '33.000 kV', 'Class D', 'TNB', 'DISTRIBUTION',
-                'ALNA: 4S5', 'SPIP: 3L5', '630_1C_AL_XLPE', 'SEBERANG JAYA', 7467.73504, 'Insert', 'ALNA'
-            ],
-        ];
+        // Path to your CSV file. Make sure this path is correct.
+        // It's often good practice to place seed data in a 'data' folder
+        // within your database directory, or ensure the path is absolute.
+        $csvFile = database_path('seeders/data/PPUSSU_processed.csv'); // Adjust path as needed
 
-        foreach ($csvData as $data) {
-            SubstationTableSeeder::create([
-                'Id' => $data[0],
-                'Circ_id' => $data[1],
-                'Circ_id2' => $data[2],
-                'Circuit_id' => $data[3],
-                'Status' => $data[4],
-                'Phasing' => $data[5],
-                'Voltage' => $data[6],
-                'Class' => $data[7],
-                'Owner_Type' => $data[8],
-                'Owner_Name' => $data[9],
-                'From_Info' => $data[10],
-                'To_Info' => $data[11],
-                'Label' => $data[12],
-                'Op_Area' => $data[13],
-                'Cal_Length' => $data[14],
-                'Status_act' => $data[15],
-                'Circ_label' => $data[16],
+        // Check if the file exists
+        if (!file_exists($csvFile)) {
+            $this->command->error("CSV file not found at: {$csvFile}");
+            return;
+        }
+
+        // Using League\Csv for robust CSV parsing
+        // If you don't have it, install with: composer require league/csv
+        $csv = Reader::createFromPath($csvFile, 'r');
+        $csv->setHeaderOffset(0); // Assuming the first row is the header
+
+        $records = $csv->getRecords();
+
+        // Clear existing data to avoid duplicates on re-seeding
+        // Important: This will remove all current data from the 'substations' table!
+        DB::table('substations')->truncate(); 
+
+        foreach ($records as $record) {
+            DB::table('substations')->insert([
+                'substation_id' => $record['Id'], // Mapped from CSV 'Id'
+                'status' => $record['Status'],
+                'name' => $record['Name'],
+                'owner_type' => $record['Owner_Type'],
+                'owner_name' => $record['Owner_Name'],
+                'design' => $record['Design'],
+                'voltage' => $record['Voltage'],
+                'functional_location' => $record['FL'], // Mapped from CSV 'FL'
+                'operational_area' => $record['Op_Area'], // Mapped from CSV 'Op_Area'
+                'category' => $record['Category'],
+                'status_act' => $record['Status_act'],
+                'latitude' => (double) $record['Latitude'], // Cast to double for decimal precision
+                'longitude' => (double) $record['Longitude'], // Cast to double for decimal precision
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
+
+        $this->command->info('Substations table seeded successfully!');
     }
 }

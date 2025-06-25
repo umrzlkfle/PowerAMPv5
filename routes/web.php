@@ -1,29 +1,38 @@
 <?php
 
-use App\Http\Controllers\SubstationController;
-use App\Http\Controllers\CableController;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Livewire\Auth\ForgotPassword;
 use App\Http\Livewire\Auth\ResetPassword;
-use App\Http\Livewire\Auth\SignUp;
 use App\Http\Livewire\Auth\Login;
+use App\Http\Livewire\CableEdit;
 use App\Http\Livewire\Dashboard;
-use App\Http\Livewire\ExcelUpload;
-use App\Http\Livewire\Profile;
 use App\Http\Livewire\Tables;
 use App\Http\Livewire\StaticSignIn;
-use App\Http\Livewire\StaticSignUp;
 use App\Http\Livewire\Performance;
 
+use App\Http\Livewire\Upload;
 use App\Http\Livewire\Maintenance;
-use App\Http\Livewire\Cables;
-use App\Http\Livewire\Substation;
-use App\Http\Livewire\CsvProcessor;
+use App\Http\Livewire\CableList;
+use App\Http\Livewire\Substations;
+use App\Http\Livewire\SubstationImport;
+use App\Http\Livewire\CableImport;
+use App\Http\Livewire\SubstationList;
+use App\Http\Livewire\SubstationShow;
+use App\Http\Livewire\SubstationEdit;
+use App\Http\Livewire\CableShow;
+use App\Http\Livewire\SubstationMap;
+use App\Http\Livewire\Report;
+use App\Http\Livewire\MaintenanceList;
+
+use App\Http\Controllers\CableController;
 
 use App\Http\Livewire\LaravelExamples\UserProfile;
 use App\Http\Livewire\LaravelExamples\UserManagement;
-use App\Http\Livewire\Substations;
+use App\Http\Livewire\SalesChart;
+use App\Http\Livewire\Auth\Upload as AuthUpload;
+use App\Models\Substation;
 use Illuminate\Http\Request;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
@@ -42,32 +51,52 @@ Route::get('/', function() {
     return redirect('/login');
 });
 
-Route::get('/sign-up', SignUp::class)->name('sign-up');
 Route::get('/login', Login::class)->name('login');
 
 Route::get('/login/forgot-password', ForgotPassword::class)->name('forgot-password');
 
 Route::get('/reset-password/{id}',ResetPassword::class)->name('reset-password')->middleware('signed');
 
-Route::get('/upload-excel', ExcelUpload::class )->name('upload-sample');
-
-
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/maintenance', Maintenance::class)->name('maintenance');
-    Route::get('/profile', Profile::class)->name('profile');
+    Route::get('/maintenance/breakdownlist', MaintenanceList::class)->name('maintenance list');
+    Route::get('/profile', Upload::class)->name('profile');
     Route::get('/tables', Tables::class)->name('tables');
     Route::get('/static-sign-in', StaticSignIn::class)->name('sign-in');
-    Route::get('/static-sign-up', StaticSignUp::class)->name('static-sign-up');
     Route::get('/performance', Performance::class)->name('performance');
-    Route::get('/laravel-user-profile', UserProfile::class)->name('user-profile');
-    Route::get('/laravel-user-management', UserManagement::class)->name('user-management');
 
-    Route::get('/csv-processor', CsvProcessor::class)->name('csvprocessor');
-    Route::get('/substations', Substations::class)->name('substations');
-    Route::get('/cables', Cables::class)->name('cables');
+    // Admin-only routes for user management
+    Route::middleware('can:admin-only')->group(function () {
+        Route::get('/laravel-user-profile', UserProfile::class)->name('user-profile');
+        Route::get('/laravel-user-management', UserManagement::class)->name('user-management');
+    });
 
-    Route::resource('substation', controller: SubstationController::class);
-    Route::resource('cable', controller: CableController::class);
+    Route::get('/upload', Upload::class)->name('upload');
+    Route::get('/substations', SubstationList::class)->name('substations');
+    Route::get('/cables', CableList::class)->name('cables');
+
+    // Routes requiring 'edit-delete-access' (Admin only)
+    Route::middleware('can:edit-delete-access')->group(function () {
+        Route::get('/substations/import', SubstationImport::class)->name('substations import');
+        Route::get('/cables/import', CableImport::class)->name('cables import');
+        Route::get('/substation/{substation}/edit', SubstationEdit::class)->name('substation edit');
+        Route::get('/cable/{cable}/edit', CableEdit::class)->name('cable edit');
+    });
+
+    Route::get('/substation/{substation}', SubstationShow::class)->name('substation show');
+    Route::get('/cable/{cable}', CableShow::class)->name('cable show');
+    Route::get('/report', \App\Http\Livewire\Report::class)->name('report');
+
+    // Template download route for Upload blade
+    Route::get('/download/template/{filename}', function($filename) {
+        return Storage::download('private/' . $filename);
+    })->name('download.template');
+
 });
 
+
+Route::prefix('substation')->group(function () {
+    // Show route
+    Route::get('/{id}', SubstationShow::class)->name('substation.show');
+});

@@ -11,27 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('circuits', function (Blueprint $table) {
+        Schema::create('substations', function (Blueprint $table) {
             $table->id();
-            $table->string('original_id')->nullable();
-            $table->string('circ_id')->nullable();
-            $table->string('circ_id2')->nullable();
-            $table->string('circuit_id')->nullable();
+            $table->string('substation_id')->unique()->nullable();
             $table->string('status')->nullable();
-            $table->string('phasing')->nullable();
-            $table->string('voltage')->nullable();
-            $table->string('class')->nullable();
+            $table->string('name')->nullable();
             $table->string('owner_type')->nullable();
             $table->string('owner_name')->nullable();
-            $table->string('from_info')->nullable();
-            $table->string('to_info')->nullable();
-            $table->string('label')->nullable();
-            $table->string('op_area')->nullable();
-            $table->float('cal_length')->nullable();
+            $table->string('design')->nullable();
+            $table->string('voltage')->nullable();
+            // Make 'label' unique as it will be used as a foreign key reference
+            $table->string('label')->unique()->nullable();
+            $table->string('functional_location')->nullable();
+            $table->string('operational_area')->nullable();
+            $table->string('category')->nullable();
             $table->string('status_act')->nullable();
-            $table->string('circ_label')->nullable();
-            $table->string('processed_file_path')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\BreakdownRecord;
+use App\Models\Substation;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,15 +19,27 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            UserTableSeeder::class
+            UserTableSeeder::class,
+            // SubstationTableSeeder::class,
+            // CableTableSeeder::class,
+            AssetTableSeeder::class,
+            BreakdownRecordsTableSeeder::class,
+            MaintenanceRecordsTableSeeder::class,
         ]);
         
-        // Create a default user
-        User::factory()->create([
-            'name' => 'admin base',
-            'email' => 'admin@softui.com',
-            'password' => Hash::make('secret'),
-            'role' => 'admin'
-        ]);
+// Create default users
+User::factory()->create([
+    'name' => 'admin base',
+    'email' => 'admin@tnb.com',
+    'password' => Hash::make('secret'),
+    'role' => 'admin'
+]);
+
+User::create([
+    'name' => 'Izzat Hatta',
+    'email' => 'izzathatta@tnb.com',
+    'role' => 'staff',
+    'password' => Hash::make('123456789'), // Added Hash::make for password security
+]);
     }
 }

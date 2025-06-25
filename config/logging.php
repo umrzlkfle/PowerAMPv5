@@ -100,6 +100,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        'temporary_file_upload' => [
+            'disk' => env('LIVEWIRE_TEMPORARY_FILE_UPLOAD_DISK', 'local'),
+            'rules' => ['file', 'mimes:csv,txt', 'max:10240'], // 10MB
+            'directory' => 'livewire-tmp',
+            'middleware' => 'throttle:60,1',
+        ],
     ],
 
 ];
