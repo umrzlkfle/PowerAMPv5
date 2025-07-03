@@ -15,9 +15,7 @@
                             </div>
                         </div>
                         <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                                <i class="fas fa-bolt text-lg opacity-10" aria-hidden="true"></i> {{-- Changed icon to bolt --}}
-                            </div>
+                            <img src="{{ asset('assets/img/illustrations/power-plant.png') }}" alt="Folder Icon" style="width:48px; height:48px;" class="mb-2">
                         </div>
                     </div>
                 </div>
@@ -38,9 +36,8 @@
                             </div>
                         </div>
                         <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md"> {{-- Changed to success gradient --}}
-                                <i class="fas fa-check-circle text-lg opacity-10" aria-hidden="true"></i> {{-- Changed icon to check-circle --}}
-                            </div>
+                            <img src="{{ asset('assets/img/illustrations/active.png') }}" alt="Folder Icon" style="width:48px; height:48px;" class="mb-2">
+
                         </div>
                     </div>
                 </div>
@@ -61,9 +58,8 @@
                             </div>
                         </div>
                         <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-secondary shadow text-center border-radius-md"> {{-- Changed to secondary gradient --}}
-                                <i class="fas fa-times-circle text-lg opacity-10" aria-hidden="true"></i> {{-- Changed icon to times-circle --}}
-                            </div>
+                            <img src="{{ asset('assets/img/illustrations/inactive.png') }}" alt="Folder Icon" style="width:48px; height:48px;" class="mb-2">
+
                         </div>
                     </div>
                 </div>
@@ -84,9 +80,8 @@
                             </div>
                         </div>
                         <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-info shadow text-center border-radius-md"> {{-- Changed to info gradient, cable icon --}}
-                                <i class="fas fa-network-wired text-lg opacity-10" aria-hidden="true"></i> {{-- Changed icon to network-wired (or fa-cable) --}}
-                            </div>
+                            <img src="{{ asset('assets/img/illustrations/wiring.png') }}" alt="Folder Icon" style="width:48px; height:48px;" class="mb-2">
+
                         </div>
                     </div>
                 </div>
@@ -107,9 +102,8 @@
                             </div>
                         </div>
                         <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-warning shadow text-center border-radius-md"> {{-- Changed to warning gradient, wrench icon --}}
-                                <i class="fas fa-wrench text-lg opacity-10" aria-hidden="true"></i> {{-- Changed icon to wrench (or fa-exclamation-circle for issues) --}}
-                            </div>
+                            <img src="{{ asset('assets/img/illustrations/breakdown.png') }}" alt="Folder Icon" style="width:48px; height:48px;" class="mb-2">
+
                         </div>
                     </div>
                 </div>
@@ -128,9 +122,8 @@
                             </div>
                         </div>
                         <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-warning shadow text-center border-radius-md"> {{-- Changed to warning gradient, wrench icon --}}
-                                <i class="fas fa-wrench text-lg opacity-10" aria-hidden="true"></i> {{-- Changed icon to wrench (or fa-exclamation-circle for issues) --}}
-                            </div>
+                            <img src="{{ asset('assets/img/illustrations/rectified.png') }}" alt="Folder Icon" style="width:48px; height:48px;" class="mb-2">
+
                         </div>
                     </div>
                 </div>
